@@ -33,6 +33,7 @@ router.post("/", async (req, res) => {
         password: clave,
       });
       const usuarioGuardado = await user.save();
+      
       //Crear usuario
       const nuevoUsuario = new UsuariosModel({
         id_user: usuarioGuardado._id,

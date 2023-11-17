@@ -43,14 +43,8 @@ router.put("/:id", async function (req, res) {
     edad,
     foto,
     telefono,
-    ubicacion,
-    experiencialaboral,
-    educacionculinaria,
-    disponibilidad,
-    especialidadesculinarias,
-    habilidadesadicionales,
-    redessociales,
-    historialpuntuaciones,
+    correo,
+    ubicacion
   } = req.body;
   const id = req.params.id;
 
@@ -73,14 +67,8 @@ router.put("/:id", async function (req, res) {
           edad,
           foto,
           telefono,
-          ubicacion,
-          experiencialaboral,
-          educacionculinaria,
-          disponibilidad,
-          especialidadesculinarias,
-          habilidadesadicionales,
-          redessociales,
-          historialpuntuaciones,
+          correo,
+          ubicacion
         },
       }
     );

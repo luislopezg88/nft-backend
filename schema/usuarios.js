@@ -7,14 +7,8 @@ const UsuarioSchema = new Mongoose.Schema({
   edad: { type: Number },
   foto: { type: String },
   telefono: { type: String },
-  ubicacion: { type: String },
-  experiencialaboral: { type: String },
-  educacionculinaria: { type: String },
-  disponibilidad: { type: String },
-  especialidadesculinarias: [{ type: String }],
-  habilidadesadicionales: [{ type: String }],
-  redessociales: [{ type: String }],
-  historialpuntuaciones: [{ type: String }],
+  correo: { type: String },
+  ubicacion: { type: String }
 });
 
 UsuarioSchema.statics.existsById = async function (usuarioId) {
