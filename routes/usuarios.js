@@ -1,6 +1,6 @@
 const express = require("express");
 const { jsonResponse } = require("../lib/jsonResponse");
-const UsuariosModel = require("../schema/usuarios");
+const UsuariosModel = require("../schema/user");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async function (req, res) {
   const id = req.params.id;
   try {
-    const data = await UsuariosModel.findOne({ id_user: id });
+    const data = await UsuariosModel.findOne({ _id: id });
 
     res.json(
       jsonResponse(200, {
@@ -37,19 +37,10 @@ router.get("/:id", async function (req, res) {
 });
 
 router.put("/:id", async function (req, res) {
-  const {
-    nombre,
-    sexo,
-    edad,
-    foto,
-    telefono,
-    correo,
-    ubicacion
-  } = req.body;
+  const { nombre, sexo, edad, foto, telefono, correo, ubicacion } = req.body;
   const id = req.params.id;
 
   try {
-    //const exists = await UsuariosModel.exists({ _id: id });
     const exists = await UsuariosModel.existsById(id);
 
     if (!exists) {
@@ -65,10 +56,8 @@ router.put("/:id", async function (req, res) {
           nombre,
           sexo,
           edad,
-          foto,
           telefono,
-          correo,
-          ubicacion
+          ubicacion,
         },
       }
     );

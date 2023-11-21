@@ -7,8 +7,14 @@ const Token = require("../schema/token");
 const UserSchema = new Mongoose.Schema({
   id: { type: Object },
   email: { type: String, required: true, unique: true },
-  name: { type: String },
   password: { type: String, required: true },
+  nombre: { type: String },
+  sexo: { type: String },
+  edad: { type: Number },
+  foto: { type: String },
+  telefono: { type: String },
+  correo: { type: String },
+  ubicacion: { type: String },
 });
 
 UserSchema.pre("save", function (next) {
@@ -29,7 +35,7 @@ UserSchema.pre("save", function (next) {
 });
 
 UserSchema.methods.usernameExists = async function (email) {
-  const result = await Mongoose.model("User").find({ email: email });
+  const result = await Mongoose.model("usuarios").find({ email: email });
   return result.length > 0;
 };
 
@@ -55,4 +61,9 @@ UserSchema.methods.createRefreshToken = async function (next) {
   }
 };
 
-module.exports = Mongoose.model("User", UserSchema);
+UserSchema.statics.existsById = async function (usuarioId) {
+  const usuarioCount = await this.countDocuments({ _id: usuarioId });
+  return usuarioCount > 0;
+};
+
+module.exports = Mongoose.model("usuarios", UserSchema);

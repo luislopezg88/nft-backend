@@ -8,16 +8,20 @@ const ColeccionesSchema = new Mongoose.Schema({
   },
   nombre: { type: String },
   descripcion: { type: String },
-  regiones: { type: String },
-  estilos: { type: String },
-  ingredientes: { type: String },
-  tecnicas: { type: String },
-  tipo: { type: String },
+  estilo: { type: String },
   imagen: { type: String },
-  precio: { type: Number },
+  direccionContrato: { type: String },
+  idToken: { type: String },
+  estandarToken: { type: String },
+  cadena: { type: String },
+  fechaCreacion: { type: Date, default: Date.now },
+  actualizacion: { type: Date, default: Date.now }, // Nuevo campo para la fecha de creación
 });
 
-ColeccionesSchema.statics.existsByNombreAndUsuarioId = async function (nombre, id_usuario) {
+ColeccionesSchema.statics.existsByNombreAndUsuarioId = async function (
+  nombre,
+  id_usuario
+) {
   const coleccionCount = await this.countDocuments({ nombre, id_usuario });
   return coleccionCount > 0;
 };

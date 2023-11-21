@@ -22,8 +22,9 @@ async function main() {
 app.use("/api/login", require("./routes/login"));
 app.use("/api/signup", require("./routes/signup"));
 app.use("/api/signout", require("./routes/logout"));
-app.use("/api/usuarios", require("./routes/usuarios"));
-app.use("/api/colecciones", require("./routes/colecciones"));
+app.use("/api/usuario", require("./routes/usuarios"));
+app.use("/api/coleccion", require("./routes/colecciones"));
+app.use("/api/activo", require("./routes/activo"));
 app.use("/api/dashboard", require("./routes/dashboard"));
 app.use("/api/carrito", require("./routes/carrito"));
 // Ruta para renovar el

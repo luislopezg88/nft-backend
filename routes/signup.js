@@ -1,6 +1,5 @@
 const express = require("express");
 const UserModel = require("../schema/user");
-const UsuariosModel = require("../schema/usuarios");
 const { jsonResponse } = require("../lib/jsonResponse");
 const router = express.Router();
 
@@ -29,23 +28,17 @@ router.post("/", async (req, res) => {
       //Crear usuario
       const user = new UserModel({
         email: correo,
-        name: nombre,
         password: clave,
-      });
-      const usuarioGuardado = await user.save();
-      
-      //Crear usuario
-      const nuevoUsuario = new UsuariosModel({
-        id_user: usuarioGuardado._id,
         nombre: nombre,
         sexo: genero,
         edad: edad,
       });
-      // Guardar el usuario
-      await nuevoUsuario.save();
+      //Ejecutar
+      const execute = await user.save();
 
       res.json(
         jsonResponse(200, {
+          id: execute._id,
           message: "Creado exitosamente",
         })
       );

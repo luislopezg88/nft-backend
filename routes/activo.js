@@ -1,14 +1,14 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
-const ColeccionesSchema = require("../schema/colecciones");
+const activoSchema = require("../schema/activo");
 const { jsonResponse } = require("../lib/jsonResponse");
 const router = express.Router();
 
 // Configurar multer carga de archivos
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "imagenes/colecciones/"); // Directorio donde se guardarán las imágenes de colecciones
+    cb(null, "imagenes/activos/"); // Directorio donde se guardarán las imágenes de colecciones
   },
   filename: function (req, file, cb) {
     const nombreArchivo = req.body.imagen; // + path.extname(file.originalname);
@@ -20,7 +20,7 @@ const upload = multer({ storage: storage });
 
 router.get("/", async (req, res) => {
   try {
-    const items = await ColeccionesSchema.find({ id_user: req.user.id });
+    const items = await activoSchema.find({ id_user: req.user.id });
     return res.json(items);
   } catch (error) {
     //console.log(error);
@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async function (req, res) {
   const id = req.params.id;
   try {
-    const data = await ColeccionesSchema.find({ id_usuario: id });
+    const data = await activoSchema.find({ id_usuario: id });
 
     res.json(
       jsonResponse(200, {
@@ -47,11 +47,18 @@ router.get("/:id", async function (req, res) {
     );
   }
 });
-//upload.single("file"),
+
 router.post("/", upload.none(), async (req, res) => {
-  const { idUsuario, nombre, descripcion, estilo, imagen, cadena } = req.body;
-  const direccionContrato =
-    "address / 0x09a8528539ce1701cfde6ea6ea03ec0e7c3f0a2";
+  const {
+    idUsuario,
+    idColeccion,
+    nombre,
+    descripcion,
+    imagen,
+    precio,
+    suministrar,
+    visto,
+  } = req.body;
   if (!nombre) {
     return res.status(409).json(
       jsonResponse(409, {
@@ -61,34 +68,32 @@ router.post("/", upload.none(), async (req, res) => {
   }
 
   try {
-    const exists = await ColeccionesSchema.existsByNombreAndUsuarioId(
+    const exists = await activoSchema.existsByNombreAndUsuarioId(
       nombre,
-      idUsuario
+      idColeccion
     );
 
     if (exists) {
       return res.status(409).json(
         jsonResponse(409, {
-          error: "Colección ya existe",
+          error: "NFT ya existe",
         })
       );
     } else {
-      //Crear Colección
-      const nuevaColeccion = new ColeccionesSchema({
+      //Crear NFT
+      const nuevaActivo = new activoSchema({
         id_usuario: idUsuario,
+        id_coleccion: idColeccion,
         nombre: nombre,
         descripcion: descripcion,
-        estilo: estilo,
         imagen: imagen,
-        cadena: cadena,
-        direccionContrato: direccionContrato,
-        idToken: "109",
-        estandarToken: "ERC - 721",
-        cadena: "Ethereum",
+        precio: precio,
+        visto: visto,
+        suministrar: suministrar,
       });
-
-      // Guardar la Colección
-      const coleccionInfo = await nuevaColeccion.save();
+      ///
+      // Guardar la Activo
+      const coleccionInfo = await nuevaActivo.save();
       res.json(
         jsonResponse(200, {
           coleccionInfo,
