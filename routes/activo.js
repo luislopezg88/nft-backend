@@ -20,8 +20,14 @@ const upload = multer({ storage: storage });
 
 router.get("/", async (req, res) => {
   try {
-    const items = await activoSchema.find({ id_user: req.user.id });
-    return res.json(items);
+    const data = await activoSchema.find();
+
+    res.json(
+      jsonResponse(200, {
+        data,
+        recordsTotal: data.length,
+      })
+    );
   } catch (error) {
     //console.log(error);
     return res.status(500).json({ error: "Error al obtener los todos" });
@@ -48,7 +54,7 @@ router.get("/:id", async function (req, res) {
   }
 });
 
-router.post("/", upload.none(), async (req, res) => {
+router.post("/", upload.single("file"), async (req, res) => {
   const {
     idUsuario,
     idColeccion,
@@ -68,7 +74,7 @@ router.post("/", upload.none(), async (req, res) => {
   }
 
   try {
-    const exists = await activoSchema.existsByNombreAndUsuarioId(
+    const exists = await activoSchema.existsByNombreAndColletion(
       nombre,
       idColeccion
     );
@@ -91,7 +97,6 @@ router.post("/", upload.none(), async (req, res) => {
         visto: visto,
         suministrar: suministrar,
       });
-      ///
       // Guardar la Activo
       const coleccionInfo = await nuevaActivo.save();
       res.json(

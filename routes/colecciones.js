@@ -20,10 +20,15 @@ const upload = multer({ storage: storage });
 
 router.get("/", async (req, res) => {
   try {
-    const items = await ColeccionesSchema.find({ id_user: req.user.id });
-    return res.json(items);
+    const data = await ColeccionesSchema.find();
+
+    res.json(
+      jsonResponse(200, {
+        data,
+        recordsTotal: data.length,
+      })
+    );
   } catch (error) {
-    //console.log(error);
     return res.status(500).json({ error: "Error al obtener los todos" });
   }
 });
@@ -47,8 +52,8 @@ router.get("/:id", async function (req, res) {
     );
   }
 });
-//upload.single("file"),
-router.post("/", upload.none(), async (req, res) => {
+//
+router.post("/", upload.single("file"), async (req, res) => {
   const { idUsuario, nombre, descripcion, estilo, imagen, cadena } = req.body;
   const direccionContrato =
     "address / 0x09a8528539ce1701cfde6ea6ea03ec0e7c3f0a2";

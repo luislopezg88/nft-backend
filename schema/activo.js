@@ -20,7 +20,7 @@ const activoSchema = new Mongoose.Schema({
   // Nuevo campo para la fecha de creación
 });
 
-activoSchema.statics.existsByNombreAndUsuarioId = async function (
+activoSchema.statics.existsByNombreAndColletion = async function (
   nombre,
   id_coleccion
 ) {
@@ -28,4 +28,9 @@ activoSchema.statics.existsByNombreAndUsuarioId = async function (
   return nftCount > 0;
 };
 
-module.exports = Mongoose.model("nft", activoSchema);
+activoSchema.statics.countActivoCollection = async function (id_coleccion) {
+  const nftCount = await this.countDocuments({ id_coleccion });
+  return nftCount;
+};
+
+module.exports = Mongoose.model("nfts", activoSchema);

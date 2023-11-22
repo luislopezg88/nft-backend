@@ -21,7 +21,7 @@ async function main() {
 
 app.use("/api/login", require("./routes/login"));
 app.use("/api/signup", require("./routes/signup"));
-app.use("/api/signout", require("./routes/logout"));
+//app.use("/api/signout", require("./routes/logout"));
 app.use("/api/usuario", require("./routes/usuarios"));
 app.use("/api/coleccion", require("./routes/colecciones"));
 app.use("/api/activo", require("./routes/activo"));
