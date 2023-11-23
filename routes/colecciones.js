@@ -52,7 +52,7 @@ router.get("/:id", async function (req, res) {
     );
   }
 });
-//
+
 router.post("/", upload.single("file"), async (req, res) => {
   const { idUsuario, nombre, descripcion, estilo, imagen, cadena } = req.body;
   const direccionContrato =

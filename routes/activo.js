@@ -34,6 +34,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/coleccion/:id", async function (req, res) {
+  const id = req.params.id;
+  try {
+    const data = await activoSchema.find({ id_coleccion: id });
+
+    res.json(
+      jsonResponse(200, {
+        data,
+        recordsTotal: data.length,
+      })
+    );
+  } catch (err) {
+    return res.status(500).json(
+      jsonResponse(500, {
+        error: "Error al obtener la colección",
+      })
+    );
+  }
+});
+
 router.get("/:id", async function (req, res) {
   const id = req.params.id;
   try {
