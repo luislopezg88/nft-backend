@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
     const listaColecciones = req.body.listaColecciones;
 
     // Iterar sobre la lista de colecciones y guardarlos en la base de datos
-    for (const coleccion of listaColecciones) {
+    for (const coleccion of listaColecciones) { 
       const nuevaColeccion = new ColeccionesVendidas({
         id_coleccion: coleccion._id,
         id_usuario: coleccion.id_usuario,
