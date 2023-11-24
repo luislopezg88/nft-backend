@@ -15,56 +15,58 @@ const ColeccionesVendidasSchema = new Mongoose.Schema({
 });
 
 ColeccionesVendidasSchema.statics.obtenerColeccionesVendidas = async function (id_usuario) {
-    const matchStage = {
-      $match: {
-        id_usuario: id_usuario ? new Mongoose.Types.ObjectId(id_usuario) : { $exists: true },
+  const matchStage = {
+    $match: {
+      id_usuario: id_usuario
+        ? new Mongoose.Types.ObjectId(id_usuario)
+        : { $exists: true },
+    },
+  };
+
+  const resultados = await this.aggregate([
+    matchStage,
+    {
+      $group: {
+        _id: "$id_coleccion",
+        totalVentas: { $sum: "$cantidad" },
       },
-    };
-  
-    const resultados = await this.aggregate([
-      matchStage,
-      {
-        $group: {
-          _id: "$id_coleccion",
-          totalVentas: { $sum: "$cantidad" },
-        },
+    },
+    {
+      $lookup: {
+        from: "nfts", // Ajusta según el nombre de tu colección de colecciones
+        localField: "_id",
+        foreignField: "_id",
+        as: "nft",
       },
-      {
-        $lookup: {
-          from: "colecciones", // Ajusta según el nombre de tu colección de colecciones
-          localField: "_id",
-          foreignField: "_id",
-          as: "coleccion",
-        },
+    },
+    {
+      $unwind: "$nft",
+    },
+    {
+      $lookup: {
+        from: "usuarios", // Ajusta según el nombre de tu colección de usuarios
+        localField: "nft.id_usuario",
+        foreignField: "_id",
+        as: "usuario",
       },
-      {
-        $unwind: "$coleccion",
+    },
+    {
+      $unwind: "$usuario",
+    },
+    {
+      $project: {
+        _id: 0,
+        nombreColeccion: "$nft.nombre",
+        nombreUsuario: "$usuario.nombre",
+        totalVentas: 1,
       },
-      {
-        $lookup: {
-          from: "usuarios", // Ajusta según el nombre de tu colección de usuarios
-          localField: "coleccion.id_usuario",
-          foreignField: "_id",
-          as: "usuario",
-        },
-      },
-      {
-        $unwind: "$usuario",
-      },
-      {
-        $project: {
-          _id: 0,
-          nombreColeccion: "$coleccion.nombre",
-          nombreUsuario: "$usuario.nombre",
-          totalVentas: 1,
-        },
-      },
-      {
-        $sort: { totalVentas: -1 },
-      },
-    ]);
-  
-    return resultados;
+    },
+    {
+      $sort: { totalVentas: -1 },
+    },
+  ]);
+
+  return resultados;
 };
 
 ColeccionesVendidasSchema.statics.obtenerVentasPorUsuario = async function () {
