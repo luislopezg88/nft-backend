@@ -10,7 +10,9 @@ router.get("/", async (req, res) => {
 router.get("/usuario/:id", async function (req, res) {
   const id = req.params.id;
   try {
-    const data = await ColeccionesSchema.dashboard({ id_usuario: id });
+    const data = await ColeccionesVendidasSchema.obtenerVentasPorUsuario({
+      id_usuario: id,
+    });
 
     res.json(
       jsonResponse(200, {
@@ -41,7 +43,9 @@ router.get("/ColeccionesVendidas", async (req, res) => {
 // Ruta para Colecciones más vendidos del usuario
 router.get("/coleccionesVendidas/:id_usuario", async (req, res) => {
   const { id_usuario } = req.params;
-  const data = await ColeccionesVendidasSchema.obtenerColeccionesVendidas(id_usuario);
+  const data = await ColeccionesVendidasSchema.obtenerColeccionesVendidas(
+    id_usuario
+  );
   return res.json(
     jsonResponse(200, {
       data,
