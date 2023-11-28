@@ -105,4 +105,17 @@ router.post("/", upload.single("file"), async (req, res) => {
   }
 });
 
+router.get("/imagen/:img", function (req, res) {
+  const img = req.params.img;
+  const fileName = encodeURIComponent(img);
+  const filePath = path.join(
+    __dirname,
+    "..",
+    "imagenes",
+    "colecciones",
+    fileName
+  );
+  res.sendFile(filePath);
+});
+
 module.exports = router;
